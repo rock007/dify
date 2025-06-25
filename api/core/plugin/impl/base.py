@@ -61,6 +61,8 @@ class BasePluginClient:
             data = json.dumps(data)
 
         try:
+
+            print(f"url:{url}")
             response = requests.request(
                 method=method, url=str(url), headers=headers, data=data, params=params, stream=stream, files=files
             )
