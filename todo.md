@@ -6,7 +6,7 @@
 
 ### web  front
 + doccker 方式运行
-  docker run -id -p 3000:3000 --name=dify-web  -e CONSOLE_API_URL=http://192.168.1.3:5001 -e APP_API_URL=http://192.168.1.3:5001 docker.m.daocloud.io/langgenius/dify-web:1.4.3
+  docker run -id -p 3000:3000 --name=dify-web  -e CONSOLE_API_URL=http://192.168.1.2:5001 -e APP_API_URL=http://192.168.1.2:5001 docker.m.daocloud.io/langgenius/dify-web:1.4.3
 
 ### 中间件 docker-compose.middleware.yaml
 + pg 
@@ -188,3 +188,14 @@ curl -X POST 'http://192.168.1.3:5001/api/chat-messages' --header 'Authorization
 + 修改 api/extensions/ext_blueprints.py 增加新增controller
  + + 获取所有模型 http://192.168.1.3:5001/open_ai/api/models 
  + + 消息 http://192.168.1.3:5001/open_ai/api/chat/completions 
+
+
+ ## 数据库新加用户 
+
+ + 系统帐号  sam_lucky@163.com zx123456
+
+CREATE USER dify WITH PASSWORD 'fuckthis321';
+
+GRANT ALL PRIVILEGES ON DATABASE dify_plugin TO dify;
+
+GRANT ALL PRIVILEGES ON DATABASE dify TO dify;
