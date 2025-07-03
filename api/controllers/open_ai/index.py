@@ -81,8 +81,6 @@ def message_list(value):
     return [Message(**item) for item in value]
 
 ## 方式二
-
-
 class MessageSchema(Schema):
     role = fields.Str(required=True)
     content = fields.Str(required=True)
@@ -167,44 +165,40 @@ class ModelsApi(Resource):
 
 class ChatCompletionsApi(Resource):
 
-    site_fields = {
-        "title": fields.String,
-        "chat_color_theme": fields.String,
-        "chat_color_theme_inverted": fields.Boolean,
-        "icon_type": fields.String,
-        "icon": fields.String,
-        "icon_background": fields.String,
-      #  "icon_url": AppIconUrlField,
-        "description": fields.String,
-        "copyright": fields.String,
-        "privacy_policy": fields.String,
-        "custom_disclaimer": fields.String,
-        "default_language": fields.String,
-        "prompt_public": fields.Boolean,
-        "show_workflow_steps": fields.Boolean,
-        "use_icon_as_answer_icon": fields.Boolean,
+    message_fields = {
+        "role": fields.String,
+        "content": fields.String,
     }
 
-    app_fields = {
-        "app_id": fields.String,
-        "end_user_id": fields.String,
-        "enable_site": fields.Boolean,
-        "site": fields.Nested(site_fields),
-      #  "model_config": fields.Nested(model_config_fields, allow_null=True),
-        "plan": fields.String,
-        "can_replace_logo": fields.Boolean,
-        "custom_config": fields.Raw(attribute="custom_config"),
+    chatCompletionReq_fields = {
+        "model": fields.String,
+ 
+        "messages": fields.List(fields.Nested(message_fields)) ,
+        "temperature": fields.Float,
+        "top_p": fields.Float,
+        "n": fields.Int,
+        "stream": fields.Boolean,
+
+        # union 好像不支持
+        #"stop": fields.String,
+
+        "max_tokens": fields.String,
+        "presence_penalty": fields.Float,
+        "frequency_penalty": fields.Float,
+        "logit_bias": fields.Dict(keys=fields.Str(), values=fields.Float()),
+        
+        "user": fields.String,
     }
 
-    @marshal_with(site_fields)
+    @marshal_with(chatCompletionReq_fields)
     #@validate_app_token(fetch_user_arg=FetchUserArg(fetch_from=WhereisUserArg.JSON, required=True))
     def post(self):
         try:
 
-            # 方式一
-            request = MessageListSchema().load(request.get_json())
+            # 方式一  不行
+            #request = MessageListSchema().load(request.get_json())
 
-            print(request)
+            #print(request)
 
             #request: ChatCompletionRequest
 
